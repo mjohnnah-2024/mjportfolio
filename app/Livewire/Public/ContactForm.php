@@ -54,7 +54,7 @@ class ContactForm extends Component
         $this->validate();
 
         $ip = request()->ip();
-        $rateLimitKey = 'contact-form:' . sha1($ip);
+        $rateLimitKey = 'contact-form:'.sha1($ip);
 
         if (RateLimiter::tooManyAttempts($rateLimitKey, 5)) {
             $this->errorMessage = 'Too many submissions. Please wait before trying again.';
@@ -72,13 +72,23 @@ class ContactForm extends Component
             'subject' => $this->subject,
             'enquiry_type' => EnquiryType::from($this->enquiryType),
             'message' => $this->message,
-            'ip_hash' => hash('sha256', $ip . config('app.key')),
-            'user_agent_hash' => hash('sha256', (string) request()->userAgent() . config('app.key')),
+            'ip_hash' => hash('sha256', $ip.config('app.key')),
+            'user_agent_hash' => hash('sha256', (string) request()->userAgent().config('app.key')),
         ]);
 
         SendContactNotification::dispatch($contactMessage);
 
         $this->submitted = true;
+        session()->flash('success', 'Thank you '.$this->name.'! Your message has been received. I typically respond within 24 hours on business days.');
+    }
+
+    public function resetForm(): void
+    {
+        $this->reset([
+            'name', 'email', 'phone', 'organisation',
+            'subject', 'enquiryType', 'message', 'consent',
+            'submitted', 'errorMessage',
+        ]);
     }
 
     public function render()

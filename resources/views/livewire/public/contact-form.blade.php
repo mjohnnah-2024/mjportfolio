@@ -45,18 +45,34 @@
 
             {{-- Form --}}
             <div class="lg:col-span-2">
-                @if(session('success'))
-                    <div class="bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800 rounded-2xl p-6 mb-8" role="alert">
-                        <div class="flex items-start gap-3">
-                            <flux:icon name="check-circle" class="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
-                            <div>
-                                <p class="font-semibold text-green-800 dark:text-green-300">Message Sent!</p>
-                                <p class="text-sm text-green-700 dark:text-green-400 mt-1">{{ session('success') }}</p>
-                            </div>
-                        </div>
+                {{-- Error banner --}}
+                @if($errorMessage)
+                    <div class="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 rounded-2xl p-5 mb-6 flex items-start gap-3" role="alert">
+                        <flux:icon name="exclamation-circle" class="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                        <p class="text-sm text-red-700 dark:text-red-400">{{ $errorMessage }}</p>
                     </div>
                 @endif
 
+                {{-- Success state — shown after submission --}}
+                @if($submitted)
+                    <div class="bg-gradient-to-br from-purple-50 to-green-50 dark:from-purple-900/10 dark:to-green-900/10 border border-green-200 dark:border-green-800 rounded-2xl p-8 text-center">
+                        <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-5">
+                            <flux:icon name="check-circle" class="w-8 h-8 text-green-600 dark:text-green-400" aria-hidden="true" />
+                        </div>
+                        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Message Sent!</h2>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
+                            Thank you for reaching out. Your message has been received and I will get back to you as soon as possible — usually within 24 hours on business days.
+                        </p>
+                        <button
+                            type="button"
+                            wire:click="resetForm"
+                            class="inline-flex items-center gap-2 px-6 py-2.5 border border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-400 text-sm font-medium rounded-xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
+                        >
+                            Send Another Message
+                        </button>
+                    </div>
+                @else
+                {{-- Validation error banner --}}
                 @if($errors->any())
                     <div class="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 rounded-2xl p-4 mb-6" role="alert">
                         <p class="text-sm font-medium text-red-800 dark:text-red-300 mb-2">Please fix the following errors:</p>
@@ -201,15 +217,17 @@
                     <button
                         type="submit"
                         wire:loading.attr="disabled"
-                        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-purple-700 hover:bg-purple-800 disabled:bg-purple-400 text-white font-semibold rounded-xl transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2"
+                        wire:target="submit"
+                        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-purple-700 hover:bg-purple-800 disabled:bg-purple-400 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2"
                     >
-                        <span wire:loading.remove>Send Message</span>
-                        <span wire:loading class="flex items-center gap-2">
+                        <span wire:loading.remove wire:target="submit">Send Message</span>
+                        <span wire:loading wire:target="submit" class="flex items-center gap-2">
                             <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                             Sending…
                         </span>
                     </button>
                 </form>
+                @endif
             </div>
         </div>
     </div>
