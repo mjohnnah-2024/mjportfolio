@@ -60,6 +60,135 @@
             </div>
         </div>
 
+        {{-- Images --}}
+        <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 p-7 space-y-6">
+            <h2 class="text-base font-semibold text-gray-900 dark:text-white">Images</h2>
+
+            {{-- Featured Image --}}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Featured Image</label>
+
+                @if($currentFeaturedImagePath && !$removeFeaturedImageFlag && !$featuredImage)
+                    <div class="mb-3 flex items-start gap-4">
+                        <img src="{{ asset('storage/' . $currentFeaturedImagePath) }}"
+                             alt="Current featured image"
+                             class="w-40 h-24 object-cover rounded-xl border border-gray-200 dark:border-zinc-700">
+                        <div class="flex flex-col gap-2">
+                            <span class="text-xs text-gray-500 dark:text-gray-400">Current image</span>
+                            <button type="button" wire:click="clearFeaturedImage"
+                                class="inline-flex items-center gap-1.5 text-xs text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors">
+                                <flux:icon name="trash" class="w-3.5 h-3.5" />
+                                Remove image
+                            </button>
+                        </div>
+                    </div>
+                @endif
+
+                @if($removeFeaturedImageFlag && !$featuredImage)
+                    <div class="mb-3 flex items-center gap-2 text-xs text-amber-600 dark:text-amber-400">
+                        <flux:icon name="exclamation-triangle" class="w-4 h-4" />
+                        Image will be removed on save.
+                        <button type="button" wire:click="$set('removeFeaturedImageFlag', false)" class="underline hover:no-underline">Undo</button>
+                    </div>
+                @endif
+
+                @if($featuredImage)
+                    <div class="mb-3 flex items-start gap-4">
+                        <img src="{{ $featuredImage->temporaryUrl() }}"
+                             alt="New featured image preview"
+                             class="w-40 h-24 object-cover rounded-xl border border-purple-300 dark:border-purple-700">
+                        <div class="flex flex-col gap-2">
+                            <span class="text-xs text-purple-600 dark:text-purple-400">New image (not saved yet)</span>
+                            <button type="button" wire:click="$set('featuredImage', null)"
+                                class="inline-flex items-center gap-1.5 text-xs text-red-600 hover:text-red-800 dark:text-red-400 transition-colors">
+                                <flux:icon name="x-mark" class="w-3.5 h-3.5" />
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                @endif
+
+                <div class="relative">
+                    <label for="featuredImageInput" class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 dark:border-zinc-700 rounded-xl cursor-pointer hover:border-purple-400 dark:hover:border-purple-600 transition-colors bg-gray-50 dark:bg-zinc-800/50">
+                        <div class="flex flex-col items-center gap-1">
+                            <flux:icon name="photo" class="w-6 h-6 text-gray-400" />
+                            <span class="text-sm text-gray-500 dark:text-gray-400">
+                                <span class="text-purple-700 dark:text-purple-400 font-medium">Click to upload</span> or drag and drop
+                            </span>
+                            <span class="text-xs text-gray-400">JPG, PNG, GIF, WebP — max 2 MB</span>
+                        </div>
+                        <input id="featuredImageInput" type="file" wire:model="featuredImage" accept="image/*" class="sr-only" />
+                    </label>
+                    <div wire:loading wire:target="featuredImage" class="absolute inset-0 flex items-center justify-center bg-white/70 dark:bg-zinc-900/70 rounded-xl">
+                        <span class="text-sm text-purple-700 dark:text-purple-400">Uploading…</span>
+                    </div>
+                </div>
+                @error('featuredImage') <p class="mt-1 text-xs text-red-600" role="alert">{{ $message }}</p> @enderror
+            </div>
+
+            {{-- Logo --}}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Project Logo</label>
+
+                @if($currentLogoPath && !$removeLogoFlag && !$logo)
+                    <div class="mb-3 flex items-start gap-4">
+                        <img src="{{ asset('storage/' . $currentLogoPath) }}"
+                             alt="Current project logo"
+                             class="w-16 h-16 object-contain rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 p-1">
+                        <div class="flex flex-col gap-2">
+                            <span class="text-xs text-gray-500 dark:text-gray-400">Current logo</span>
+                            <button type="button" wire:click="clearLogo"
+                                class="inline-flex items-center gap-1.5 text-xs text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors">
+                                <flux:icon name="trash" class="w-3.5 h-3.5" />
+                                Remove logo
+                            </button>
+                        </div>
+                    </div>
+                @endif
+
+                @if($removeLogoFlag && !$logo)
+                    <div class="mb-3 flex items-center gap-2 text-xs text-amber-600 dark:text-amber-400">
+                        <flux:icon name="exclamation-triangle" class="w-4 h-4" />
+                        Logo will be removed on save.
+                        <button type="button" wire:click="$set('removeLogoFlag', false)" class="underline hover:no-underline">Undo</button>
+                    </div>
+                @endif
+
+                @if($logo)
+                    <div class="mb-3 flex items-start gap-4">
+                        <img src="{{ $logo->temporaryUrl() }}"
+                             alt="New logo preview"
+                             class="w-16 h-16 object-contain rounded-xl border border-purple-300 dark:border-purple-700 bg-gray-50 dark:bg-zinc-800 p-1">
+                        <div class="flex flex-col gap-2">
+                            <span class="text-xs text-purple-600 dark:text-purple-400">New logo (not saved yet)</span>
+                            <button type="button" wire:click="$set('logo', null)"
+                                class="inline-flex items-center gap-1.5 text-xs text-red-600 hover:text-red-800 dark:text-red-400 transition-colors">
+                                <flux:icon name="x-mark" class="w-3.5 h-3.5" />
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                @endif
+
+                <div class="relative">
+                    <label for="logoInput" class="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-300 dark:border-zinc-700 rounded-xl cursor-pointer hover:border-purple-400 dark:hover:border-purple-600 transition-colors bg-gray-50 dark:bg-zinc-800/50">
+                        <div class="flex flex-col items-center gap-1">
+                            <flux:icon name="swatch" class="w-5 h-5 text-gray-400" />
+                            <span class="text-sm text-gray-500 dark:text-gray-400">
+                                <span class="text-purple-700 dark:text-purple-400 font-medium">Click to upload</span> logo
+                            </span>
+                            <span class="text-xs text-gray-400">JPG, PNG, GIF, WebP — max 1 MB</span>
+                        </div>
+                        <input id="logoInput" type="file" wire:model="logo" accept="image/*" class="sr-only" />
+                    </label>
+                    <div wire:loading wire:target="logo" class="absolute inset-0 flex items-center justify-center bg-white/70 dark:bg-zinc-900/70 rounded-xl">
+                        <span class="text-sm text-purple-700 dark:text-purple-400">Uploading…</span>
+                    </div>
+                </div>
+                @error('logo') <p class="mt-1 text-xs text-red-600" role="alert">{{ $message }}</p> @enderror
+            </div>
+        </div>
+
         {{-- Project Details --}}
         <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 p-7 space-y-5">
             <h2 class="text-base font-semibold text-gray-900 dark:text-white">Project Details</h2>

@@ -70,14 +70,20 @@
                     @foreach($projects as $project)
                         <article class="group bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 overflow-hidden flex flex-col hover:shadow-lg transition-shadow" role="listitem">
                             @if($project->featuredImageUrl())
-                                <img
-                                    src="{{ $project->featuredImageUrl() }}"
-                                    alt="{{ $project->name }} screenshot"
-                                    class="w-full h-48 object-cover"
-                                    loading="lazy"
-                                />
+                                <div class="aspect-video w-full overflow-hidden bg-gray-100 dark:bg-zinc-800">
+                                    <img
+                                        src="{{ $project->featuredImageUrl() }}"
+                                        alt="{{ $project->name }} screenshot"
+                                        class="w-full h-full object-cover object-[50%_0%] group-hover:scale-105 transition-transform duration-500"
+                                        loading="lazy"
+                                    />
+                                </div>
+                            @elseif($project->logoUrl())
+                                <div class="aspect-video w-full bg-gradient-to-br from-purple-900/20 to-zinc-900 flex items-center justify-center">
+                                    <img src="{{ $project->logoUrl() }}" alt="{{ $project->name }} logo" class="max-h-24 max-w-[55%] object-contain" loading="lazy" />
+                                </div>
                             @else
-                                <div class="w-full h-48 bg-gradient-to-br from-purple-800 to-purple-950 flex items-center justify-center" aria-hidden="true">
+                                <div class="aspect-video w-full bg-gradient-to-br from-purple-800 to-purple-950 flex items-center justify-center" aria-hidden="true">
                                     <flux:icon name="code-bracket-square" class="w-14 h-14 text-purple-400/60" />
                                 </div>
                             @endif
@@ -105,8 +111,8 @@
                                         class="text-sm font-medium text-purple-700 dark:text-purple-400 hover:text-purple-900 dark:hover:text-purple-300 transition-colors group-hover:underline"
                                         aria-label="View {{ $project->name }} details"
                                     >View details →</a>
-                                    @if($project->demo_url)
-                                        <a href="{{ $project->demo_url }}" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors" aria-label="Live demo of {{ $project->name }}">Live demo ↗</a>
+                                    @if($project->live_url)
+                                        <a href="{{ $project->live_url }}" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors" aria-label="Live demo of {{ $project->name }}">Live demo ↗</a>
                                     @endif
                                 </div>
                             </div>

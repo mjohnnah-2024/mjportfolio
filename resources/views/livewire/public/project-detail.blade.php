@@ -30,6 +30,31 @@
         </div>
     </div>
 
+    {{-- Featured Image --}}
+    @if($project->featuredImageUrl())
+        <div class="max-w-5xl mx-auto px-6 lg:px-8 -mt-6">
+            <div class="rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-purple-950/30">
+                <img
+                    src="{{ $project->featuredImageUrl() }}"
+                    alt="{{ $project->name }}"
+                    class="w-full max-h-[480px] object-cover"
+                    loading="eager"
+                >
+            </div>
+        </div>
+    @elseif($project->logoUrl())
+        <div class="max-w-5xl mx-auto px-6 lg:px-8 -mt-6">
+            <div class="rounded-2xl overflow-hidden border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900 flex items-center justify-center py-14">
+                <img
+                    src="{{ $project->logoUrl() }}"
+                    alt="{{ $project->name }} logo"
+                    class="max-h-32 max-w-sm object-contain"
+                    loading="eager"
+                >
+            </div>
+        </div>
+    @endif
+
     <div class="max-w-5xl mx-auto px-6 lg:px-8 py-14">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {{-- Main content --}}
@@ -94,6 +119,11 @@
 
             {{-- Sidebar --}}
             <aside class="space-y-6" aria-label="Project details">
+                @if($project->logoUrl() && !$project->featuredImageUrl())
+                    <div class="bg-gray-50 dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 p-6 flex items-center justify-center">
+                        <img src="{{ $project->logoUrl() }}" alt="{{ $project->name }} logo" class="max-h-20 max-w-full object-contain">
+                    </div>
+                @endif
                 <div class="bg-gray-50 dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 p-6">
                     <h3 class="font-semibold text-gray-900 dark:text-white mb-4 text-sm uppercase tracking-wider">Project Info</h3>
                     <dl class="space-y-3 text-sm">

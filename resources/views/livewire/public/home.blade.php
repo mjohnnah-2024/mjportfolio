@@ -5,7 +5,7 @@
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="max-w-3xl">
                 <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-purple-700 text-white font-bold text-2xl tracking-tight mb-8 select-none shadow-lg shadow-purple-900/30" aria-hidden="true">MJ</div>
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-6">
+                <h1 class="text-4xl sm:text-5xl lg:text-5xl font-bold tracking-tight leading-tight mb-6">
                     Building Secure, Scalable and<br class="hidden sm:block">
                     <span class="text-purple-400">AI-Assisted</span> Web Applications
                 </h1>
@@ -89,13 +89,17 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach($featuredProjects as $project)
-                        <article class="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 overflow-hidden hover:border-purple-300 dark:hover:border-purple-700 transition-colors flex flex-col">
+                        <article class="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 overflow-hidden hover:border-purple-300 dark:hover:border-purple-700 transition-colors flex flex-col group">
                             @if($project->featuredImageUrl())
-                                <div class="aspect-video bg-gray-100 dark:bg-zinc-800 overflow-hidden">
-                                    <img src="{{ $project->featuredImageUrl() }}" alt="{{ $project->name }}" class="w-full h-full object-cover" loading="lazy">
+                                <div class="aspect-video w-full overflow-hidden bg-gray-100 dark:bg-zinc-800">
+                                    <img src="{{ $project->featuredImageUrl() }}" alt="{{ $project->name }}" class="w-full h-full object-cover object-[50%_0%] group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                                </div>
+                            @elseif($project->logoUrl())
+                                <div class="aspect-video w-full bg-gradient-to-br from-purple-900/20 to-purple-800/10 flex items-center justify-center">
+                                    <img src="{{ $project->logoUrl() }}" alt="{{ $project->name }} logo" class="max-h-20 max-w-[60%] object-contain" loading="lazy">
                                 </div>
                             @else
-                                <div class="aspect-video bg-gradient-to-br from-purple-900/20 to-purple-800/10 flex items-center justify-center">
+                                <div class="aspect-video w-full bg-gradient-to-br from-purple-900/20 to-purple-800/10 flex items-center justify-center">
                                     <span class="text-3xl font-bold text-purple-700/30 dark:text-purple-400/30">{{ Str::initials($project->name) }}</span>
                                 </div>
                             @endif

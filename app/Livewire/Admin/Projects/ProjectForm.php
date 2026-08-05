@@ -4,13 +4,16 @@ namespace App\Livewire\Admin\Projects;
 
 use App\Models\Project;
 use App\Models\ProjectCategory;
-use App\Models\Technology;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class ProjectForm extends Component
 {
+    use WithFileUploads;
+
     public ?int $projectId = null;
 
     #[Validate('required|string|max:255')]
@@ -47,7 +50,22 @@ class ProjectForm extends Component
     public ?int $projectCategoryId = null;
 
     public bool $isFeatured = false;
+
     public bool $isDemo = false;
+
+    #[Validate('nullable|image|max:2048|mimes:jpg,jpeg,png,gif,webp')]
+    public $featuredImage = null;
+
+    #[Validate('nullable|image|max:1024|mimes:jpg,jpeg,png,gif,webp')]
+    public $logo = null;
+
+    public ?string $currentFeaturedImagePath = null;
+
+    public ?string $currentLogoPath = null;
+
+    public bool $removeFeaturedImageFlag = false;
+
+    public bool $removeLogoFlag = false;
 
     #[Validate('nullable|date')]
     public string $startDate = '';
@@ -81,6 +99,8 @@ class ProjectForm extends Component
             $this->projectCategoryId = $project->project_category_id;
             $this->isFeatured = $project->is_featured;
             $this->isDemo = $project->is_demo;
+            $this->currentFeaturedImagePath = $project->featured_image_path;
+            $this->currentLogoPath = $project->logo_path;
             $this->startDate = $project->start_date?->format('Y-m-d') ?? '';
             $this->completionDate = $project->completion_date?->format('Y-m-d') ?? '';
             $this->seoTitle = $project->seo_title ?? '';
@@ -95,9 +115,49 @@ class ProjectForm extends Component
         }
     }
 
+    public function clearFeaturedImage(): void
+    {
+        $this->featuredImage = null;
+        $this->removeFeaturedImageFlag = true;
+    }
+
+    public function clearLogo(): void
+    {
+        $this->logo = null;
+        $this->removeLogoFlag = true;
+    }
+
     public function save(): void
     {
         $this->validate();
+
+        // Handle featured image
+        $featuredImagePath = $this->currentFeaturedImagePath;
+        if ($this->featuredImage) {
+            if ($featuredImagePath) {
+                Storage::disk('public')->delete($featuredImagePath);
+            }
+            $featuredImagePath = $this->featuredImage->store('projects/featured', 'public');
+        } elseif ($this->removeFeaturedImageFlag) {
+            if ($featuredImagePath) {
+                Storage::disk('public')->delete($featuredImagePath);
+            }
+            $featuredImagePath = null;
+        }
+
+        // Handle logo
+        $logoPath = $this->currentLogoPath;
+        if ($this->logo) {
+            if ($logoPath) {
+                Storage::disk('public')->delete($logoPath);
+            }
+            $logoPath = $this->logo->store('projects/logos', 'public');
+        } elseif ($this->removeLogoFlag) {
+            if ($logoPath) {
+                Storage::disk('public')->delete($logoPath);
+            }
+            $logoPath = null;
+        }
 
         $data = [
             'name' => $this->name,
@@ -115,6 +175,8 @@ class ProjectForm extends Component
             'is_demo' => $this->isDemo,
             'start_date' => $this->startDate ?: null,
             'completion_date' => $this->completionDate ?: null,
+            'featured_image_path' => $featuredImagePath,
+            'logo_path' => $logoPath,
             'seo_title' => $this->seoTitle ?: null,
             'seo_description' => $this->seoDescription ?: null,
             'published_at' => $this->status === 'published' ? now() : null,

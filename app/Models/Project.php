@@ -90,8 +90,21 @@ class Project extends Model
     public function featuredImageUrl(): ?string
     {
         return $this->featured_image_path
-            ? asset('storage/' . $this->featured_image_path)
+            ? asset('storage/'.$this->featured_image_path)
             : null;
+    }
+
+    public function logoUrl(): ?string
+    {
+        return $this->logo_path
+            ? asset('storage/'.$this->logo_path)
+            : null;
+    }
+
+    /** Returns the best available image URL: featured → logo → null */
+    public function cardImageUrl(): ?string
+    {
+        return $this->featuredImageUrl() ?? $this->logoUrl();
     }
 
     public function isPublished(): bool

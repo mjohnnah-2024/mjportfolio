@@ -3,7 +3,7 @@
     <section class="bg-gradient-to-br from-zinc-950 via-purple-950 to-zinc-950 text-white py-20 lg:py-28">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="max-w-3xl">
-                <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-6">About <span class="text-purple-400">Mark Johnnah</span></h1>
+                <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-6">About <span class="text-purple-400">Me</span></h1>
                 <p class="text-lg text-gray-300 leading-relaxed">
                     Full-Stack Laravel Developer, Software Architect and AI-Assisted Development Engineer based in Port Moresby, Papua New Guinea.
                 </p>
