@@ -64,6 +64,15 @@
         <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 p-7 space-y-6">
             <h2 class="text-base font-semibold text-gray-900 dark:text-white">Images</h2>
 
+            @if($imageError)
+                <div class="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800 rounded-xl p-4 text-sm text-amber-800 dark:text-amber-300" role="alert">
+                    <div class="flex items-start gap-2.5">
+                        <flux:icon name="exclamation-triangle" class="w-4 h-4 mt-0.5 flex-shrink-0" aria-hidden="true" />
+                        <p>{{ $imageError }}</p>
+                    </div>
+                </div>
+            @endif
+
             {{-- Featured Image --}}
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Featured Image</label>

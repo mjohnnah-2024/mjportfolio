@@ -67,6 +67,8 @@ class ProjectForm extends Component
 
     public bool $removeLogoFlag = false;
 
+    public ?string $imageError = null;
+
     #[Validate('nullable|date')]
     public string $startDate = '';
 
@@ -131,32 +133,41 @@ class ProjectForm extends Component
     {
         $this->validate();
 
+        $this->imageError = null;
+
         // Handle featured image
         $featuredImagePath = $this->currentFeaturedImagePath;
-        if ($this->featuredImage) {
-            if ($featuredImagePath) {
-                Storage::disk('public')->delete($featuredImagePath);
-            }
-            $featuredImagePath = $this->featuredImage->store('projects/featured', 'public');
-        } elseif ($this->removeFeaturedImageFlag) {
-            if ($featuredImagePath) {
-                Storage::disk('public')->delete($featuredImagePath);
-            }
-            $featuredImagePath = null;
-        }
 
-        // Handle logo
-        $logoPath = $this->currentLogoPath;
-        if ($this->logo) {
-            if ($logoPath) {
-                Storage::disk('public')->delete($logoPath);
+        try {
+            if ($this->featuredImage) {
+                if ($featuredImagePath) {
+                    Storage::disk('public')->delete($featuredImagePath);
+                }
+                $featuredImagePath = $this->featuredImage->store('projects/featured', 'public');
+            } elseif ($this->removeFeaturedImageFlag) {
+                if ($featuredImagePath) {
+                    Storage::disk('public')->delete($featuredImagePath);
+                }
+                $featuredImagePath = null;
             }
-            $logoPath = $this->logo->store('projects/logos', 'public');
-        } elseif ($this->removeLogoFlag) {
-            if ($logoPath) {
-                Storage::disk('public')->delete($logoPath);
+
+            // Handle logo
+            $logoPath = $this->currentLogoPath;
+            if ($this->logo) {
+                if ($logoPath) {
+                    Storage::disk('public')->delete($logoPath);
+                }
+                $logoPath = $this->logo->store('projects/logos', 'public');
+            } elseif ($this->removeLogoFlag) {
+                if ($logoPath) {
+                    Storage::disk('public')->delete($logoPath);
+                }
+                $logoPath = null;
             }
-            $logoPath = null;
+        } catch (\Throwable $e) {
+            $this->imageError = 'Image upload failed. The server is missing the PHP fileinfo extension. Please contact your hosting provider to enable fileinfo in PHP.';
+            $featuredImagePath = $this->currentFeaturedImagePath;
+            $logoPath = $this->currentLogoPath;
         }
 
         $data = [
