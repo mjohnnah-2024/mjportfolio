@@ -16,12 +16,12 @@ Route::get('/projects/{slug}', ProjectDetail::class)->name('projects.show');
 Route::get('/ai-help', AiHelp::class)->name('ai-help');
 Route::get('/contact', ContactForm::class)->name('contact');
 
-use Illuminate\Support\Facades\Artisan;
+//use Illuminate\Support\Facades\Artisan;
 
-Route::get('/run-symlink', function () {
-    Artisan::call('storage:link');
-    return 'Symlink created successfully!';
-});
+// Route::get('/run-symlink', function () {
+   // Artisan::call('storage:link');
+    //return 'Symlink created successfully!';
+//});
 
 
 // Sitemap
