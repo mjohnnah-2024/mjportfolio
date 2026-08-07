@@ -10,7 +10,7 @@
                     <span class="text-purple-400">AI-Assisted</span> Web Applications
                 </h1>
                 <p class="text-lg lg:text-xl text-gray-300 leading-relaxed mb-10 max-w-2xl">
-                    I am a full-stack Laravel developer, software architect and DevOps professional with more than 15 years of experience across web applications, infrastructure and hosting platforms. I currently focus on controlled agentic software development using Laravel AI SDK, Claude Code, GPT, Gemini and open-source LLMs.
+                    I am a full-stack Laravel developer, software architect and DevOps professional with more than 15 years of experience across web applications, infrastructure and hosting platforms. I currently focus on controlled agentic software development using AI SDKs, Claude Code, GPT, Gemini and open-source LLMs.
                 </p>
                 <div class="flex flex-wrap items-center gap-4 mb-10">
                     <a href="{{ route('projects.index') }}" class="inline-flex items-center px-6 py-3 bg-purple-700 hover:bg-purple-600 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-purple-900/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950">
